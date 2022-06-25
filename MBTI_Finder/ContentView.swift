@@ -13,46 +13,56 @@ struct ContentView: View {
     @State var questionIndex: Int = 0
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color(UIColor(red: 0.10, green: 0.74, blue: 0.61, alpha: 1.00))
-                    .edgesIgnoringSafeArea(.all)
-                VStack {
-                    Spacer()
-                    Text(questions.getQuestionText(at: questionIndex))
-                        .foregroundColor(.white)
-                        .font(.system(size: 20))
-                        .fontWeight(.medium)
-                        .padding()
-                        .background(.secondary)
-                        .cornerRadius(15)
-                    Spacer()
-                    HStack(spacing: 20) {
-                        Button("Yes") {
-                            score.yesButtonAction(questionIndex)
-                            questionIndex += 1
-                            if (questions.questions.count <= questionIndex) {
-                                print(score.getResult())
+        GeometryReader { geometry in
+            NavigationView {
+                ZStack {
+                    Color(UIColor(red: 0.10, green: 0.74, blue: 0.61, alpha: 1.00))
+                        .edgesIgnoringSafeArea(.all)
+                    VStack {
+                        Spacer()
+                        Text(questions.getQuestionText(at: questionIndex))
+                            .foregroundColor(.white)
+                            .font(.system(size: 20))
+                            .fontWeight(.medium)
+                            .padding()
+                            .background(.secondary)
+                            .cornerRadius(15)
+                        Spacer()
+                        HStack(spacing: 20) {
+                            Button {
+                                score.yesButtonAction(questionIndex)
+                                questionIndex += 1
+                                if (questions.questions.count <= questionIndex) {
+                                    print(score.getResult())
+                                }
+                            } label: {
+                                Text("그렇다")
+                                    .frame(width: geometry.size.width * 0.35, height: 40)
                             }
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.primary)
-                        .foregroundColor(.white)
-                        Button("No") {
-                            score.noButtonAction(questionIndex)
-                            questionIndex += 1
-                            if (questions.questions.count <= questionIndex) {
-                                print(score.getResult())
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.borderedProminent)
+                            .tint(.black)
+                            .foregroundColor(.white)
+                            Button {
+                                score.noButtonAction(questionIndex)
+                                questionIndex += 1
+                                if (questions.questions.count <= questionIndex) {
+                                    print(score.getResult())
+                                }
+                            } label: {
+                                Text("아니다")
+                                    .frame(width: geometry.size.width * 0.35, height: 40)
                             }
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.borderedProminent)
+                            .tint(.black)
+                            .foregroundColor(.white)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.primary)
-                        .foregroundColor(.white)
+                        Spacer()
                     }
-                    Spacer()
+                    .padding()
+                    .navigationBarTitle("MBTI Finder")
                 }
-                .padding()
-                .navigationBarTitle("MBTI Finder")
             }
         }
     }
