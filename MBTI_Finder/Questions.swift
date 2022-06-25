@@ -57,7 +57,7 @@ class Questions: ObservableObject {
         }
     }
     
-    func getProgress(at questionIndex: Int) -> Float {
-        return Float(questionIndex) / Float(questions.count)
+    func getProgress(at questionIndex: Int) -> Double {
+        return Double(questionIndex) / Double(questions.count)
     }
 }
