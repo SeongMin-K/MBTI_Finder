@@ -35,38 +35,36 @@ struct ContentView: View {
                             .cornerRadius(15)
                         Spacer()
                         HStack(spacing: 20) {
-                            Button {
-                                score.yesButtonAction(questionIndex)
-                                if (questions.questions.count <= questionIndex) {
-                                    print(score.getResult())
-                                } else {
+                            if (questions.questions.count > questionIndex) {
+                                Button {
+                                    score.yesButtonAction(questionIndex)
                                     questionIndex += 1
+                                } label: {
+                                    Text("그렇다")
+                                        .frame(width: geometry.size.width * 0.35, height: 40)
+                                        .font(.system(size: 18, weight: .medium, design: .rounded))
                                 }
-                            } label: {
-                                Text("그렇다")
-                                    .frame(width: geometry.size.width * 0.35, height: 40)
-                                    .font(.system(size: 18, weight: .medium, design: .rounded))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .buttonStyle(.borderedProminent)
-                            .tint(.black)
-                            .foregroundColor(.white)
-                            Button {
-                                score.noButtonAction(questionIndex)
-                                if (questions.questions.count <= questionIndex) {
-                                    print(score.getResult())
-                                } else {
+                                .frame(maxWidth: .infinity)
+                                .buttonStyle(.borderedProminent)
+                                .tint(.black)
+                                .foregroundColor(.white)
+                                Button {
+                                    score.noButtonAction(questionIndex)
                                     questionIndex += 1
+                                } label: {
+                                    Text("아니다")
+                                        .frame(width: geometry.size.width * 0.35, height: 40)
+                                        .font(.system(size: 18, weight: .medium, design: .rounded))
                                 }
-                            } label: {
-                                Text("아니다")
-                                    .frame(width: geometry.size.width * 0.35, height: 40)
-                                    .font(.system(size: 18, weight: .medium, design: .rounded))
+                                .frame(maxWidth: .infinity)
+                                .buttonStyle(.borderedProminent)
+                                .tint(.black)
+                                .foregroundColor(.white)
+                            } else {
+                                Text(score.getResult())
+                                    .font(.system(size: 65, weight: .heavy, design: .monospaced))
+                                    .foregroundColor(.white)
                             }
-                            .frame(maxWidth: .infinity)
-                            .buttonStyle(.borderedProminent)
-                            .tint(.black)
-                            .foregroundColor(.white)
                         }
                         Spacer()
                     }
