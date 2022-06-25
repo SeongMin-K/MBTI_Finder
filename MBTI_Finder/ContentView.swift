@@ -26,14 +26,15 @@ struct ContentView: View {
                             .progressViewStyle(.linear)
                             .tint(.secondary)
                             .shadow(color: .primary, radius: 3, x: 1, y: 2)
-                        Spacer()
+                        Spacer(minLength: geometry.size.height * 0.2)
                         Text(questions.getQuestionText(at: questionIndex))
-                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .font(.system(size: 20, weight: .light, design: .rounded))
                             .padding()
+                            .foregroundColor(.white)
                             .background(.secondary)
                             .cornerRadius(15)
-                        Spacer()
+                        Spacer(minLength: geometry.size.height * 0.2)
                         HStack(spacing: 20) {
                             if (questions.questions.count > questionIndex) {
                                 Button {
@@ -44,10 +45,9 @@ struct ContentView: View {
                                         .frame(width: geometry.size.width * 0.35, height: 40)
                                         .font(.system(size: 18, weight: .medium, design: .rounded))
                                 }
-                                .frame(maxWidth: .infinity)
                                 .buttonStyle(.borderedProminent)
-                                .tint(.black)
                                 .foregroundColor(.white)
+                                .tint(.black)
                                 Button {
                                     score.noButtonAction(questionIndex)
                                     questionIndex += 1
@@ -56,17 +56,28 @@ struct ContentView: View {
                                         .frame(width: geometry.size.width * 0.35, height: 40)
                                         .font(.system(size: 18, weight: .medium, design: .rounded))
                                 }
-                                .frame(maxWidth: .infinity)
                                 .buttonStyle(.borderedProminent)
-                                .tint(.black)
                                 .foregroundColor(.white)
+                                .tint(.black)
                             } else {
-                                Text(score.getResult())
-                                    .font(.system(size: 65, weight: .heavy, design: .monospaced))
-                                    .foregroundColor(.white)
+                                VStack(spacing: 50) {
+                                    Text(score.getResult())
+                                        .font(.system(size: 65, weight: .heavy, design: .monospaced))
+                                        .foregroundColor(.white)
+                                    Button {
+                                        questionIndex = 0
+                                    } label: {
+                                        Text("다시 검사하기")
+                                            .frame(width: geometry.size.width * 0.85, height: 40)
+                                            .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                    .foregroundColor(.black)
+                                    .tint(.white)
+                                }
                             }
                         }
-                        Spacer()
+                        Spacer(minLength: geometry.size.height * 0.1)
                     }
                     .padding()
                     .navigationBarTitle("MBTI Finder")
