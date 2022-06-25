@@ -60,12 +60,17 @@ struct ContentView: View {
                                 .foregroundColor(.white)
                                 .tint(.black)
                             } else {
-                                VStack(spacing: 50) {
+                                VStack() {
                                     Text(score.getResult())
                                         .font(.system(size: 65, weight: .heavy, design: .monospaced))
                                         .foregroundColor(.white)
+                                    Text(score.getNickname(score.getResult()))
+                                        .font(.system(size: 25, weight: .medium, design: .monospaced))
+                                        .foregroundColor(.white)
+                                    Spacer(minLength: 50)
                                     Button {
                                         questionIndex = 0
+                                        score.resetScores()
                                     } label: {
                                         Text("다시 검사하기")
                                             .frame(width: geometry.size.width * 0.85, height: 40)
