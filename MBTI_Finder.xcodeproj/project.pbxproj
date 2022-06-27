@@ -56,11 +56,11 @@
 			isa = PBXGroup;
 			children = (
 				3E476AEA281AF1D700739CCB /* Questions.swift */,
-				3419224327ED7AF2005653F6 /* MBTI_FinderApp.swift */,
+				3E559755285DC82B00BC105F /* Score.swift */,
 				3419224527ED7AF2005653F6 /* ContentView.swift */,
+				3419224327ED7AF2005653F6 /* MBTI_FinderApp.swift */,
 				3419224727ED7AF3005653F6 /* Assets.xcassets */,
 				3419224927ED7AF3005653F6 /* Preview Content */,
-				3E559755285DC82B00BC105F /* Score.swift */,
 			);
 			path = MBTI_Finder;
 			sourceTree = "<group>";
