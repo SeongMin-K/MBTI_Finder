@@ -8,18 +8,21 @@
 import Foundation
 
 class Score: ObservableObject {
+    var answers = [Float]()
     var scores: [Int] = [50, 50, 50, 50]
+    var result = String()
     
-    func resetScores() {
+    func resetProcess() {
+        answers.removeAll()
         scores = [50, 50, 50, 50]
     }
     
-    func yesButtonAction(_ questionIndex: Int) {
-        scores[questionIndex % 4] += 1
+    func prevButtonAction() {
+        answers.removeLast()
     }
     
-    func noButtonAction(_ questionIndex: Int) {
-        scores[questionIndex % 4] -= 1
+    func nextButtonAction(value: Float) {
+        answers.append(value)
     }
     
     func getScores() -> [Int] {
@@ -27,12 +30,22 @@ class Score: ObservableObject {
     }
     
     func getResult() -> String {
-        var result: String = ""
-        result.append(contentsOf: scores[0] > 50 ? "E" : "I")
-        result.append(contentsOf: scores[1] > 50 ? "S" : "N")
-        result.append(contentsOf: scores[2] > 50 ? "T" : "F")
-        result.append(contentsOf: scores[3] > 50 ? "P" : "J")
         return result
+    }
+    
+    func resultProcess() {
+        for index in 0..<answers.count {
+            scores[index % 4] += Int(answers[index])
+        }
+        
+        if scores == [50, 50, 50, 50] { self.result = "Failed" }
+        
+        var mbti: String = ""
+        mbti.append(contentsOf: scores[0] > 50 ? "E" : "I")
+        mbti.append(contentsOf: scores[1] > 50 ? "S" : "N")
+        mbti.append(contentsOf: scores[2] > 50 ? "T" : "F")
+        mbti.append(contentsOf: scores[3] > 50 ? "P" : "J")
+        self.result = mbti
     }
     
     func getNickname(_ mbti: String) -> String {
@@ -53,7 +66,7 @@ class Score: ObservableObject {
         case "INTJ": return "과학자형"
         case "INFP": return "잔다르크형"
         case "INFJ": return "예언자형"
-        default: return "Default"
+        default: return "No Value"
         }
     }
 }
