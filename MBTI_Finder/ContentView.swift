@@ -12,13 +12,14 @@ struct ContentView: View {
     @State var isCompleted: Bool = false
     @ObservedObject var questions = Questions()
     @ObservedObject var score = Score()
+    @State var answerValue: Float = 0.0
     @State var questionIndex: Int = 0
     
     var body: some View {
         GeometryReader { geometry in
             NavigationView {
                 ZStack {
-                    Color(UIColor(red: 0.10, green: 0.74, blue: 0.61, alpha: 1.00))
+                    Color("PrimaryColor")
                         .edgesIgnoringSafeArea(.all)
                     if isLoading {
                         SplashView(filename: "find-something")
@@ -29,25 +30,37 @@ struct ContentView: View {
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                             ProgressView(value: questions.getProgress(at: questionIndex))
                                 .progressViewStyle(.linear)
-                                .tint(.secondary)
+                                .tint(Color("SecondaryColor"))
                                 .shadow(color: .primary, radius: 3, x: 1, y: 2)
-                            Spacer(minLength: geometry.size.height * 0.2)
+                            Spacer(minLength: geometry.size.height * 0.15)
                             Text(questions.getQuestionText(at: questionIndex))
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .font(.system(size: 20, weight: .light, design: .rounded))
                                 .padding()
                                 .foregroundColor(.white)
-                                .background(.secondary)
+                                .background(Color("SecondaryColor"))
                                 .cornerRadius(15)
-                            Spacer(minLength: geometry.size.height * 0.2)
+                            Spacer(minLength: geometry.size.height * 0.15)
+                            Text(getAnswerText(value: answerValue))
+                            Slider(value: $answerValue,
+                                   in: -2...2,
+                                   step: 1,
+                                   minimumValueLabel: Text("No"),
+                                   maximumValueLabel: Text("Yes"),
+                                   label: { Text("Answer") })
+                                .tint(Color("SecondaryColor"))
+                            Spacer(minLength: geometry.size.height * 0.05)
                             HStack(spacing: 20) {
-                                if ((questions.questions.count > questionIndex) ){
+                                if (questions.questions.count > questionIndex) {
                                     Button {
-                                        score.yesButtonAction(questionIndex)
-                                        questionIndex += 1
-                                        isCompleted = questions.questions.count <= questionIndex
+                                        if questionIndex != 0 {
+                                            questionIndex -= 1
+                                            answerValue = score.answers[questionIndex]
+                                            score.prevButtonAction()
+                                            isCompleted = questions.questions.count <= questionIndex
+                                        } 
                                     } label: {
-                                        Text("그렇다")
+                                        Text("이전")
                                             .frame(width: geometry.size.width * 0.35, height: 40)
                                             .font(.system(size: 18, weight: .medium, design: .rounded))
                                     }
@@ -55,11 +68,15 @@ struct ContentView: View {
                                     .foregroundColor(.white)
                                     .tint(.black)
                                     Button {
-                                        score.noButtonAction(questionIndex)
                                         questionIndex += 1
-                                        isCompleted = questions.questions.count <= questionIndex
+                                        score.nextButtonAction(value: answerValue)
+                                        answerValue = 0.0
+                                        if (questions.questions.count <= questionIndex) {
+                                            isCompleted = true
+                                            score.resultProcess()
+                                        }
                                     } label: {
-                                        Text("아니다")
+                                        Text(questionIndex == questions.questions.count - 1 ? "완료" : "다음")
                                             .frame(width: geometry.size.width * 0.35, height: 40)
                                             .font(.system(size: 18, weight: .medium, design: .rounded))
                                     }
@@ -77,14 +94,14 @@ struct ContentView: View {
                                         Spacer(minLength: 50)
                                         Button {
                                             questionIndex = 0
-                                            score.resetScores()
+                                            score.resetProcess()
                                         } label: {
                                             Text("다시 검사하기")
                                                 .frame(width: geometry.size.width * 0.85, height: 40)
                                                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                                         }
                                         .buttonStyle(.borderedProminent)
-                                        .foregroundColor(.black)
+                                        .foregroundColor(Color(UIColor.black))
                                         .tint(.white)
                                     }
                                 }
@@ -111,6 +128,17 @@ struct ContentView: View {
                     })
                 }
             }
+        }.preferredColorScheme(.light)
+    }
+    
+    func getAnswerText(value: Float) -> String {
+        switch value {
+        case -2.0:  return "매우 아니다"
+        case -1.0:  return "조금 아니다"
+        case 0.0:   return "보통이다"
+        case 1.0:   return "조금 그렇다"
+        case 2.0:   return "매우 그렇다"
+        default:    return "Value Error"
         }
     }
 }
