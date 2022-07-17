@@ -19,7 +19,7 @@ struct ContentView: View {
         GeometryReader { geometry in
             NavigationView {
                 ZStack {
-                    Color(UIColor(red: 0.10, green: 0.74, blue: 0.61, alpha: 1.00))
+                    Color("PrimaryColor")
                         .edgesIgnoringSafeArea(.all)
                     if isLoading {
                         SplashView(filename: "find-something")
@@ -30,7 +30,7 @@ struct ContentView: View {
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                             ProgressView(value: questions.getProgress(at: questionIndex))
                                 .progressViewStyle(.linear)
-                                .tint(.secondary)
+                                .tint(Color("SecondaryColor"))
                                 .shadow(color: .primary, radius: 3, x: 1, y: 2)
                             Spacer(minLength: geometry.size.height * 0.15)
                             Text(questions.getQuestionText(at: questionIndex))
@@ -38,7 +38,7 @@ struct ContentView: View {
                                 .font(.system(size: 20, weight: .light, design: .rounded))
                                 .padding()
                                 .foregroundColor(.white)
-                                .background(.secondary)
+                                .background(Color("SecondaryColor"))
                                 .cornerRadius(15)
                             Spacer(minLength: geometry.size.height * 0.15)
                             Text(getAnswerText(value: answerValue))
@@ -48,7 +48,7 @@ struct ContentView: View {
                                    minimumValueLabel: Text("No"),
                                    maximumValueLabel: Text("Yes"),
                                    label: { Text("Answer") })
-                                .tint(.secondary)
+                                .tint(Color("SecondaryColor"))
                             Spacer(minLength: geometry.size.height * 0.05)
                             HStack(spacing: 20) {
                                 if (questions.questions.count > questionIndex) {
@@ -101,7 +101,7 @@ struct ContentView: View {
                                                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                                         }
                                         .buttonStyle(.borderedProminent)
-                                        .foregroundColor(.black)
+                                        .foregroundColor(Color(UIColor.black))
                                         .tint(.white)
                                     }
                                 }
@@ -128,7 +128,7 @@ struct ContentView: View {
                     })
                 }
             }
-        }
+        }.preferredColorScheme(.light)
     }
     
     func getAnswerText(value: Float) -> String {
